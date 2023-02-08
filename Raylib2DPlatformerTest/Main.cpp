@@ -1,18 +1,15 @@
 #include <iostream>
 #include <string>
 #include "raylib.h"
+#include "rlgl.h"
+#include "Scene.h"
+#include "Player.h"
+#include "Entity.h"
 
 Camera3D globalCam{};
 
-const int GLOBAL_CAM_DISTANCE_LIMIT = 25;
 const int WIDTH = 1280;
 const int HEIGHT = 720;
-bool SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION = false;
-
-struct entity {
-	Vector3 pos;
-	float speed;
-} typedef Entity;
 
 void WriteDebugCameraInfo() {
 	std::string positionInfo = "positionX: " +
@@ -51,95 +48,30 @@ void WriteDebugCameraInfo() {
 	DrawText(projectionInfo.c_str(), 2, 80, 20, DARKBROWN);
 }
 
-void Update(Entity& player) {
-	BeginDrawing();
-
-	globalCam.target = player.pos;
-
-	BeginMode3D(globalCam);
-
-	ClearBackground(RAYWHITE);
-
-	DrawGrid(50, 10.0f);
-
-	DrawCylinder(player.pos, 2.0f, 2.0f, 5.0f, 10, DARKBLUE);
-
-	EndMode3D();
-
-	if (globalCam.position.z <= -GLOBAL_CAM_DISTANCE_LIMIT &&
-		globalCam.position.y >= GLOBAL_CAM_DISTANCE_LIMIT &&
-		!SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-		SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION = true;
-	}
-
-	if (globalCam.position.z > -GLOBAL_CAM_DISTANCE_LIMIT && !SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-		globalCam.position.z -= 0.5f;
-	}
-
-	if (globalCam.position.y < GLOBAL_CAM_DISTANCE_LIMIT && !SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-		globalCam.position.y += 0.5f;
-	}
-
-	WriteDebugCameraInfo();
-
-	//if ((int)globalCam.position.z == -GLOBAL_CAM_DISTANCE_LIMIT && (int)globalCam.position.y == GLOBAL_CAM_DISTANCE_LIMIT) {
-	//	DrawText("NICE!", (WIDTH / 2) - 100, (HEIGHT / 2) - 40, 80, GREEN);
-	//}
-
-	// DrawText("NICE!", (WIDTH / 2) - 100, (HEIGHT / 2) - 40, 80, GREEN);
-
-	EndDrawing();
-}
-
 int main() {
 	InitWindow(WIDTH, HEIGHT, "3D walking? IDK");
 
 	SetTargetFPS(60);
 
 	globalCam.position = { 0, 0, 0 };
-	globalCam.target = { 0, 0, 0 };
+	// globalCam.target = player.pos;
 	globalCam.up = { 0, 1, 0 };
 	globalCam.fovy = 90;
 	globalCam.projection = CAMERA_PERSPECTIVE;
 
-	Entity player{};
-	player.pos = { 0, 0, 0 };
-	player.speed = 2;
+	Player player;
+
+	Scene* scene = new Scene;
+	scene->m_Entities.emplace_back(player);
 
 	while (!WindowShouldClose())
 	{
-		Update(player);
-
-		if (IsKeyDown(KEY_R) && SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-			// RESET DATA
-			globalCam.position.x = 0;
-			globalCam.position.z = 0;
-			globalCam.position.y = 0;
-			player.pos.x = 0;
-			player.pos.y = 0;
-			player.pos.z = 0;
-			globalCam.target = { 0, 0, 0 };
-			SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION = false;
+		for (Entity& entity : scene->m_Entities) {
+			entity.Update();
 		}
 
-		if (IsKeyDown(KEY_D) && SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-			player.pos.x -= player.speed;
-			globalCam.position.x -= player.speed;
-		}
-		
-		if (IsKeyDown(KEY_A) && SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-			player.pos.x += player.speed;
-			globalCam.position.x += player.speed;
-		}
-		
-		if (IsKeyDown(KEY_W) && SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-			player.pos.z += player.speed;
-			globalCam.position.z += player.speed;
-		}
-		
-		if (IsKeyDown(KEY_S) && SHOULD_FOLLOW_THE_PLAYER_AFTER_ANIMATION) {
-			player.pos.z -= player.speed;
-			globalCam.position.z -= player.speed;
+		if (IsKeyDown(KEY_ESCAPE)) {
+			break;
 		}
 	}
 
