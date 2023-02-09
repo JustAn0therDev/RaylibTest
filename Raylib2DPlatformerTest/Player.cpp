@@ -6,7 +6,7 @@ Player::Player() : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 }
 
 void Player::Update() {
-	DrawRectangle(m_Pos.x, m_Pos.y, 50, 50, BLACK);
+	DrawRectangle(m_Pos.x, m_Pos.y, 50, 50, WHITE);
 
 	if (IsKeyDown(KEY_A)) {
 		m_Pos.x -= m_Speed;
