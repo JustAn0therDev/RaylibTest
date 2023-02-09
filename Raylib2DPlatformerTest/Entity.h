@@ -2,15 +2,19 @@
 #pragma once
 class Entity
 {
-private:
+protected:
+	Vector2 m_Scale;
 	Vector2 m_Pos;
-public:
+	float m_Rotation;
 	float m_Speed;
-	// todo: check the type of body (might as well use the b2world thingy, i forgor the name of the lib)
-
-	// todo: does my update function need a deltaTime or something? 
-	// I know its just a test project, but would be nice to get it from the OS and pass it here.
-	// void Update(float deltaTime) -> in the future
-	virtual void Update() = 0;
+public:
+	// todo: have the type of body (use Box2D later)
+	// todo: virtual void Update(float deltaTime); <- in the future
+	virtual void Update();
+	virtual void Move(float x, float y);
+	virtual void Move(Vector2& newPos);
+	virtual void SetPos(float x, float y);
+	virtual void SetPos(Vector2& newPos);
+	virtual Vector2 GetPos();
 };
 

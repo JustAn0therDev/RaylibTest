@@ -5,7 +5,7 @@
 class Scene
 {
 public:
-	std::vector<Entity> m_Entities;
-	Scene();
+	std::vector<Entity*> m_Entities;
+	~Scene();
 };
 

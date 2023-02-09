@@ -59,20 +59,28 @@ int main() {
 	globalCam.fovy = 90;
 	globalCam.projection = CAMERA_PERSPECTIVE;
 
-	Player player;
+	Player* player = new Player;
 
-	Scene* scene = new Scene;
-	scene->m_Entities.emplace_back(player);
+	player->SetPos((WIDTH / 2) - 25, (HEIGHT / 2) - 25);
+
+	Scene mainScene;
+	mainScene.m_Entities.emplace_back(player);
 
 	while (!WindowShouldClose())
 	{
-		for (Entity& entity : scene->m_Entities) {
-			entity.Update();
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+
+		for (Entity* entity : mainScene.m_Entities) {
+			entity->Update();
 		}
 
 		if (IsKeyDown(KEY_ESCAPE)) {
 			break;
 		}
+
+		EndDrawing();
 	}
 
 	CloseWindow();

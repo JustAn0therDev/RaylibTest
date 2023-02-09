@@ -1,5 +1,8 @@
 #include "Scene.h"
 
-Scene::Scene() {
-
+Scene::~Scene() {
+	for (Entity* entity : m_Entities) {
+		delete entity;
+	}
 }
+
