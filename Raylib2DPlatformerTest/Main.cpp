@@ -21,7 +21,7 @@ int main() {
 
 	SetTargetFPS(60);
 
-	b2Vec2 gravity(0, -9.8f);
+	b2Vec2 gravity(0, -11.8f);
 
 	world = new b2World(gravity);
 
@@ -30,9 +30,9 @@ int main() {
 	uint32_t velocityIterations = 6;
 	uint32_t positionIterations = 2;
 
-	Vector2 groundSize = { WIDTH, 40.0f };
+	Vector2 groundSize = { WIDTH, 20.0f };
 
-	Vector2 groundPos = { 0, -(HEIGHT - (groundSize.y / 2)) };
+	Vector2 groundPos = { 0, -(HEIGHT) };
 
 	b2Body* groundBody = Physics::CreateGround(groundSize, groundPos);
 
