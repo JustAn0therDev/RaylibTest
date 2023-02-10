@@ -21,7 +21,7 @@ int main() {
 
 	SetTargetFPS(60);
 
-	b2Vec2 gravity(0, -11.8f);
+	b2Vec2 gravity(0, -100.8f);
 
 	world = new b2World(gravity);
 

@@ -26,9 +26,8 @@ Player::Player(Vector2 size) : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
-	fixtureDef.restitution = 0.2f;
+	fixtureDef.density = 3.0f;
+	fixtureDef.friction = 0.5f;
 
 	m_Body->CreateFixture(&fixtureDef);
 }
@@ -48,9 +47,18 @@ void Player::Update() {
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
 		m_Body->SetTransform({ bodyPos.x + m_Speed, bodyPos.y }, 0);
 	}
+
+	if (IsKeyDown(KEY_SPACE)) {
+		Jump();
+	}
 }
 
 void Player::SetPos(float x, float y) {
 	m_Pos.x = x;
 	m_Pos.y = y;
+}
+
+void Player::Jump() {
+	b2Vec2 linearVelocity = m_Body->GetLinearVelocity();
+	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + (m_Speed * 6) });
 }

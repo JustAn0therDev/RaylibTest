@@ -14,5 +14,7 @@ private:
 	float m_Speed;
 	b2Body* m_Body;
 	Vector2 m_Size;
+
+	void Jump();
 };
 
