@@ -8,11 +8,11 @@ Player::Player() : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 void Player::Update() {
 	DrawRectangle(m_Pos.x, m_Pos.y, 50, 50, WHITE);
 
-	if (IsKeyDown(KEY_A)) {
+	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
 		m_Pos.x -= m_Speed;
 	}
 
-	if (IsKeyDown(KEY_D)) {
+	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
 		m_Pos.x += m_Speed;
 	}
 }

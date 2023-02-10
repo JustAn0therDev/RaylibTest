@@ -5,8 +5,8 @@ class Player : public Entity
 {
 public:
 	Player();
-	virtual void SetPos(float x, float y);
-	virtual void Update();
+	virtual void SetPos(float x, float y) override;
+	virtual void Update() override;
 	
 private:
 	Vector2 m_Pos;

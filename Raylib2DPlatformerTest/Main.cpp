@@ -19,7 +19,7 @@ int main() {
 
 	b2World* world = new b2World(gravity);
 
-	Player* player = new Player;
+	Entity* player = new Player;
 
 	player->SetPos((WIDTH / 2) - 25, (HEIGHT / 2) - 25);
 
