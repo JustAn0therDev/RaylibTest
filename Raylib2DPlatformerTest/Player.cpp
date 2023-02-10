@@ -14,7 +14,7 @@ Player::Player(Vector2 size) : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 
 	// TODO: this should have an api for creating dynamic bodies
 	b2BodyDef bodyDef;
-	bodyDef.type = b2_kinematicBody;
+	bodyDef.type = b2_dynamicBody;
 
 	// Middle of the screen
 	bodyDef.position.Set((WIDTH / 2) - m_Size.x / 2, -(HEIGHT / 2) + m_Size.y / 2);
