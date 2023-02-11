@@ -74,11 +74,11 @@ int main() {
 			break;
 		}
 
-		if (IsKeyDown(KEY_Z) && camera.zoom < 5) {
+		if (IsKeyDown(KEY_LEFT_CONTROL) && GetMouseWheelMove() == 1 && camera.zoom < 5) {
 			camera.zoom += 1;
 		}
 
-		if (IsKeyDown(KEY_X) && camera.zoom > 1) {
+		if (IsKeyDown(KEY_LEFT_CONTROL) && GetMouseWheelMove() == -1 && camera.zoom > 1) {
 			camera.zoom -= 1;
 		}
 
