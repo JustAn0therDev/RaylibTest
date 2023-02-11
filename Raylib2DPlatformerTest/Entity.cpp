@@ -32,5 +32,5 @@ void Entity::SetPos(Vector2& newPos) {
 }
 
 Vector2 Entity::GetPos() {
-	return { 0, 0 };
+	return m_Pos;
 }

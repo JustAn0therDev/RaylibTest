@@ -14,6 +14,4 @@ void Ground::Update() {
 
 	m_Pos.x = bodyPos.x;
 	m_Pos.y = -bodyPos.y;
-
-	std::cout << bodyPos.x << ", " << bodyPos.y << std::endl;
 }

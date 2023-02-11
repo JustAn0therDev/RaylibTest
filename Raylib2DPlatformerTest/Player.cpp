@@ -9,7 +9,7 @@ extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
 
-Player::Player(Vector2 size) : m_Pos({ 0, 0 }), m_Speed(7.0f) {
+Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f) {
 	m_Size = size;
 
 	// TODO: this should have an api for creating dynamic bodies
@@ -17,7 +17,7 @@ Player::Player(Vector2 size) : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 	bodyDef.type = b2_dynamicBody;
 
 	// Middle of the screen
-	bodyDef.position.Set((WIDTH / 2) - m_Size.x / 2, -(HEIGHT / 2) + m_Size.y / 2);
+	bodyDef.position.Set(pos.x, pos.y);
 
 	m_Body = world->CreateBody(&bodyDef);
 
@@ -26,8 +26,9 @@ Player::Player(Vector2 size) : m_Pos({ 0, 0 }), m_Speed(7.0f) {
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 3.0f;
+	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.5f;
+	fixtureDef.restitution = 0.1f;
 
 	m_Body->CreateFixture(&fixtureDef);
 }
@@ -38,7 +39,7 @@ void Player::Update() {
 	m_Pos.x = bodyPos.x;
 	m_Pos.y = -bodyPos.y;
 
-	DrawRectangle(m_Pos.x, m_Pos.y, 50, 50, WHITE);
+	DrawRectangle(m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, WHITE);
 
 	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
 		m_Body->SetTransform({ bodyPos.x - m_Speed, bodyPos.y }, 0);
@@ -60,5 +61,13 @@ void Player::SetPos(float x, float y) {
 
 void Player::Jump() {
 	b2Vec2 linearVelocity = m_Body->GetLinearVelocity();
-	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + (m_Speed * 6) });
+	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + m_Speed });
+}
+
+Vector2 Player::GetPos() {
+	return m_Pos;
+}
+
+Vector2 Player::GetMiddle() {
+	return { m_Pos.x + (m_Size.x / 2), m_Pos.y + (m_Size.y / 2) };
 }
