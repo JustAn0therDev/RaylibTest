@@ -54,6 +54,29 @@ void Player::Update() {
 		m_Body->SetLinearVelocity({ m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y - 1000 });
 	}
 
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		float movementVelocity = m_JumpVelocity * 5;
+
+		Vector2 mousePos = GetMousePosition();
+
+		b2Vec2 currentLinearVelocity = m_Body->GetLinearVelocity();
+
+		b2Vec2 direction = { (WIDTH / 2) - mousePos.x, ((HEIGHT / 2) + mousePos.y)};
+
+		DrawLine(GetMiddle().x, GetMiddle().y, mousePos.x, mousePos.y, RED);
+
+		float velocityY = 0;
+
+		if (mousePos.y < (HEIGHT / 2)) {
+			velocityY = direction.y * movementVelocity;
+		}
+		else {
+			velocityY = direction.y * -movementVelocity;
+		}
+
+		m_Body->SetLinearVelocity({ direction.x * -movementVelocity, velocityY });
+	}
+
 	b2ContactEdge* contactEdge = m_Body->GetContactList();
 
 	//while (contactEdge != nullptr) {
