@@ -3,13 +3,14 @@
 #include <box2d/b2_world.h>
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_fixture.h>
+#include <box2d/b2_contact.h>
 #include <iostream>
 
 extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
 
-Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(3.0f), m_JumpVelocity(2.0f) {
+Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(5.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
 	m_Size = size;
 
 	// TODO: this should have an api for creating dynamic bodies
@@ -28,7 +29,7 @@ Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(3.0f), m_Ju
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.5f;
-	fixtureDef.restitution = 0.1f;
+	fixtureDef.restitution = 0.2f;
 
 	m_Body->CreateFixture(&fixtureDef);
 }
@@ -49,14 +50,36 @@ void Player::Update() {
 		m_Body->SetTransform({ bodyPos.x + m_Speed, bodyPos.y }, 0);
 	}
 
-	if (IsKeyDown(KEY_SPACE)) {
+	b2ContactEdge* contactEdge = m_Body->GetContactList();
+
+	//while (contactEdge != nullptr) {
+	//	contactEdge->contact->GetFixtureA();
+
+	//	// TODO: for now, just check one collision because there's only one other object in the world.
+	//	contactEdge = contactEdge->next;
+	//}
+
+	if (contactEdge != nullptr) {
+		m_IsGrounded = true;
+	}
+	else {
+		m_IsGrounded = false;
+	}
+
+	if (IsKeyDown(KEY_SPACE) && m_IsGrounded) {
 		Jump();
 	}
+
+	if (!m_IsGrounded) {
+		m_Body->SetLinearVelocity({ m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y - m_FallVelocity });
+	}
+
+	std::cout << m_IsGrounded << std::endl;
 }
 
 void Player::Jump() {
 	b2Vec2 linearVelocity = m_Body->GetLinearVelocity();
-	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + m_JumpVelocity });
+	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + (m_JumpVelocity * 5) });
 }
 
 Vector2 Player::GetPos() {

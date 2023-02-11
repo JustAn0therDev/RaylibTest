@@ -14,8 +14,10 @@ private:
 	Vector2 m_Pos;
 	float m_Speed;
 	float m_JumpVelocity;
+	float m_FallVelocity;
 	b2Body* m_Body;
 	Vector2 m_Size;
+	bool m_IsGrounded;
 
 	void Jump();
 };
