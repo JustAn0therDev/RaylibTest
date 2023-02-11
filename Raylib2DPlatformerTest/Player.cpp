@@ -9,7 +9,7 @@ extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
 
-Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f) {
+Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(3.0f), m_JumpVelocity(2.0f) {
 	m_Size = size;
 
 	// TODO: this should have an api for creating dynamic bodies
@@ -39,7 +39,7 @@ void Player::Update() {
 	m_Pos.x = bodyPos.x;
 	m_Pos.y = -bodyPos.y;
 
-	DrawRectangle(m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, WHITE);
+	DrawRectangle(m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, BLACK);
 
 	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
 		m_Body->SetTransform({ bodyPos.x - m_Speed, bodyPos.y }, 0);
@@ -54,14 +54,9 @@ void Player::Update() {
 	}
 }
 
-void Player::SetPos(float x, float y) {
-	m_Pos.x = x;
-	m_Pos.y = y;
-}
-
 void Player::Jump() {
 	b2Vec2 linearVelocity = m_Body->GetLinearVelocity();
-	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + m_Speed });
+	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + m_JumpVelocity });
 }
 
 Vector2 Player::GetPos() {

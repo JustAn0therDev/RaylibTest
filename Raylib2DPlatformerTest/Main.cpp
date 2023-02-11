@@ -40,7 +40,7 @@ int main() {
 
 	Ground* ground = new Ground(groundSize, groundBody);
 
-	Vector2 playerSize = { 20, 20 };
+	Vector2 playerSize = { 20, 40 };
 
 	Vector2 playerPos = { (WIDTH / 2) - playerSize.x / 2, -(HEIGHT / 2) + (playerSize.y * 2) };
 
@@ -64,7 +64,7 @@ int main() {
 
 		world->Step(timeStep, velocityIterations, positionIterations);
 
-		ClearBackground(BLACK);
+		ClearBackground(SKYBLUE);
 
 		for (Entity* entity : mainScene.m_Entities) {
 			entity->Update();
