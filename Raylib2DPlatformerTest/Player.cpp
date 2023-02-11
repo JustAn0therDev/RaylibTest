@@ -10,7 +10,7 @@ extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
 
-Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(5.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
+Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(60.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
 	m_Size = size;
 
 	// TODO: this should have an api for creating dynamic bodies
@@ -29,7 +29,7 @@ Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_Ju
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.5f;
-	fixtureDef.restitution = 0.2f;
+	// fixtureDef.restitution = 0.1f;
 
 	m_Body->CreateFixture(&fixtureDef);
 }
@@ -48,6 +48,10 @@ void Player::Update() {
 
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
 		m_Body->SetTransform({ bodyPos.x + m_Speed, bodyPos.y }, 0);
+	}
+
+	if (IsKeyDown(KEY_S)) {
+		m_Body->SetLinearVelocity({ m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y - 1000 });
 	}
 
 	b2ContactEdge* contactEdge = m_Body->GetContactList();
@@ -73,13 +77,11 @@ void Player::Update() {
 	if (!m_IsGrounded) {
 		m_Body->SetLinearVelocity({ m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y - m_FallVelocity });
 	}
-
-	std::cout << m_IsGrounded << std::endl;
 }
 
 void Player::Jump() {
 	b2Vec2 linearVelocity = m_Body->GetLinearVelocity();
-	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + (m_JumpVelocity * 5) });
+	m_Body->SetLinearVelocity({ linearVelocity.x, linearVelocity.y + m_JumpVelocity });
 }
 
 Vector2 Player::GetPos() {
