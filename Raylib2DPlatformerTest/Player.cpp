@@ -45,7 +45,9 @@ void Player::Update() {
 		m_Body->SetLinearVelocity({ m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y - 1000 });
 	}
 
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+	// TODO: fix the collision detection for this "air dash" to become a normal dash
+	// or "super jump" even
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !m_IsGrounded && m_HasDash) {
 		float movementVelocity = m_JumpVelocity * 100;
 
 		Vector2 mousePos = { GetMouseX(), GetMouseY() };
@@ -59,10 +61,10 @@ void Player::Update() {
 
 		DrawCircle(cameraRelativeX, cameraRelativeY, 20, { 255, 0, 0, circleAlpha });
 
-		if (circleAlpha < 255 && m_HasDash) {
+		if (circleAlpha < 255) {
 			circleAlpha += 15;
 		}
-		else if (m_HasDash) {
+		else {
 			m_HasDash = false;
 			float velocityY = 0;
 
