@@ -18,6 +18,7 @@ private:
 	b2Body* m_Body;
 	Vector2 m_Size;
 	bool m_IsGrounded;
+	bool m_HasDash;
 
 	void Jump();
 };

@@ -11,7 +11,16 @@ extern float HEIGHT;
 extern float WIDTH;
 extern Camera2D camera;
 
-Player::Player(Vector2 size, Vector2 pos, b2Body* body) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(60.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
+// TODO: testing an effect
+unsigned char circleAlpha = 0;
+
+Player::Player(Vector2 size, Vector2 pos, b2Body* body) : 
+	m_Pos({ 0, 0 }), 
+	m_Speed(1.0f), 
+	m_JumpVelocity(60.0f), 
+	m_FallVelocity(2.0f), 
+	m_IsGrounded(false),
+	m_HasDash(true) {
 	m_Size = size;
 	m_Body = body;
 }
@@ -37,29 +46,39 @@ void Player::Update() {
 	}
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-		float movementVelocity = m_JumpVelocity * 5;
+		float movementVelocity = m_JumpVelocity * 100;
 
 		Vector2 mousePos = { GetMouseX(), GetMouseY() };
 
 		b2Vec2 currentLinearVelocity = m_Body->GetLinearVelocity();
 
-		b2Vec2 direction = { (WIDTH / 2) - mousePos.x, ((HEIGHT / 2) + mousePos.y)};
+		b2Vec2 direction = { (WIDTH / 2) - mousePos.x, ((HEIGHT / 2) + mousePos.y) };
 
 		float cameraRelativeX = mousePos.x - camera.offset.x + m_Pos.x + 10.0f;
 		float cameraRelativeY = mousePos.y - camera.offset.y + m_Pos.y + 25.0f;
 
-		DrawCircle(cameraRelativeX, cameraRelativeY, 20, RED);
+		DrawCircle(cameraRelativeX, cameraRelativeY, 20, { 255, 0, 0, circleAlpha });
 
-		float velocityY = 0;
-
-		if (mousePos.y < (HEIGHT / 2)) {
-			velocityY = direction.y * movementVelocity;
+		if (circleAlpha < 255 && m_HasDash) {
+			circleAlpha += 15;
 		}
-		else {
-			velocityY = direction.y * -movementVelocity;
-		}
+		else if (m_HasDash) {
+			m_HasDash = false;
+			float velocityY = 0;
 
-		m_Body->SetLinearVelocity({ direction.x * -movementVelocity, velocityY });
+			if (mousePos.y < (HEIGHT / 2)) {
+				velocityY = direction.y * movementVelocity;
+			}
+			else {
+				velocityY = direction.y * -movementVelocity;
+			}
+
+			m_Body->SetLinearVelocity({ direction.x * -movementVelocity, velocityY });
+			circleAlpha = 0;
+		}
+	}
+	else {
+		circleAlpha = 0;
 	}
 
 	// TODO: for now, just check one collision because there's only one other game object in the world.
@@ -73,7 +92,7 @@ void Player::Update() {
 
 	if (contactEdge != nullptr) {
 		m_IsGrounded = true;
-		// TODO: Used dash
+		m_HasDash = true;
 	}
 	else {
 		m_IsGrounded = false;
