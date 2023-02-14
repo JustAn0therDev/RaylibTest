@@ -5,7 +5,7 @@
 class Player : public Entity
 {
 public:
-	Player(Vector2 size, Vector2 pos);
+	Player(Vector2 size, Vector2 pos, b2Body* body);
 	virtual void Update() override;
 	virtual Vector2 GetPos() override;
 	Vector2 GetMiddle();

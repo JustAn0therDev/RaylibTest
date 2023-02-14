@@ -10,28 +10,9 @@ extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
 
-Player::Player(Vector2 size, Vector2 pos) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(60.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
+Player::Player(Vector2 size, Vector2 pos, b2Body* body) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(60.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
 	m_Size = size;
-
-	// TODO: this should have an api for creating dynamic bodies
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-
-	// Middle of the screen
-	bodyDef.position.Set(pos.x, pos.y);
-
-	m_Body = world->CreateBody(&bodyDef);
-
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(m_Size.x, m_Size.y);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.5f;
-	// fixtureDef.restitution = 0.1f;
-
-	m_Body->CreateFixture(&fixtureDef);
+	m_Body = body;
 }
 
 void Player::Update() {
@@ -57,13 +38,14 @@ void Player::Update() {
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 		float movementVelocity = m_JumpVelocity * 5;
 
-		Vector2 mousePos = GetMousePosition();
+		Vector2 mousePos = { GetMouseX(), GetMouseY() };
 
 		b2Vec2 currentLinearVelocity = m_Body->GetLinearVelocity();
 
 		b2Vec2 direction = { (WIDTH / 2) - mousePos.x, ((HEIGHT / 2) + mousePos.y)};
 
-		DrawLine(GetMiddle().x, GetMiddle().y, mousePos.x, mousePos.y, RED);
+		// TODO: the mouse position is probably relative to the rendered world, not the camera. It should be drawn relative to the camera view.
+		DrawCircle(mousePos.x, mousePos.y, 20, RED);
 
 		float velocityY = 0;
 
@@ -77,17 +59,18 @@ void Player::Update() {
 		m_Body->SetLinearVelocity({ direction.x * -movementVelocity, velocityY });
 	}
 
+	// TODO: for now, just check one collision because there's only one other game object in the world.
 	b2ContactEdge* contactEdge = m_Body->GetContactList();
 
 	//while (contactEdge != nullptr) {
 	//	contactEdge->contact->GetFixtureA();
-
-	//	// TODO: for now, just check one collision because there's only one other object in the world.
+	//	
 	//	contactEdge = contactEdge->next;
 	//}
 
 	if (contactEdge != nullptr) {
 		m_IsGrounded = true;
+		// TODO: Used dash
 	}
 	else {
 		m_IsGrounded = false;

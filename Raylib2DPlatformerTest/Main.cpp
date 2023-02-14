@@ -36,7 +36,7 @@ int main() {
 
 	Vector2 groundPos = { 0, -HEIGHT };
 
-	b2Body* groundBody = Physics::CreateGround(groundSize, groundPos);
+	b2Body* groundBody = Physics::CreateStaticBody(groundSize, groundPos);
 
 	Ground* ground = new Ground(groundSize, groundBody);
 
@@ -44,7 +44,7 @@ int main() {
 
 	Vector2 playerPos = { (WIDTH / 2) - playerSize.x / 2, -(HEIGHT / 2) + (playerSize.y * 2) };
 
-	Player* player = new Player(playerSize, playerPos);
+	Player* player = new Player(playerSize, playerPos, Physics::CreateDynamicBody(playerSize, playerPos));
 
 	camera.offset = { WIDTH / 2, HEIGHT / 2 };
 	camera.rotation = 0;
@@ -70,6 +70,7 @@ int main() {
 			entity->Update();
 		}
 
+		// General controls
 		if (IsKeyDown(KEY_ESCAPE)) {
 			break;
 		}

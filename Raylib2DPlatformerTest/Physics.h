@@ -5,6 +5,7 @@
 static class Physics
 {
 public:
-	static b2Body* CreateGround(Vector2 size, Vector2 pos);
+	static b2Body* CreateStaticBody(Vector2 size, Vector2 pos);
+	static b2Body* CreateDynamicBody(Vector2 size, Vector2 pos);
 };
 
