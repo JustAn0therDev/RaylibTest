@@ -19,7 +19,7 @@ Camera2D camera{};
 const int TARGET_FPS = 60;
 
 int main() {
-	InitWindow(WIDTH, HEIGHT, "Smash beat'em up");
+	InitWindow(static_cast<int>(WIDTH), static_cast<int>(HEIGHT), "Smash beat'em up");
 
 	SetTargetFPS(TARGET_FPS);
 

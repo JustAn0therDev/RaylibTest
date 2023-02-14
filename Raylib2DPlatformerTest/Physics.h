@@ -2,7 +2,7 @@
 #include <box2d/b2_body.h>
 #include <raylib.h>
 
-static class Physics
+class Physics
 {
 public:
 	static b2Body* CreateStaticBody(Vector2 size, Vector2 pos);
