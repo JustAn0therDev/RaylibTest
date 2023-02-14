@@ -9,6 +9,7 @@
 extern b2World* world;
 extern float HEIGHT;
 extern float WIDTH;
+extern Camera2D camera;
 
 Player::Player(Vector2 size, Vector2 pos, b2Body* body) : m_Pos({ 0, 0 }), m_Speed(1.0f), m_JumpVelocity(60.0f), m_FallVelocity(2.0f), m_IsGrounded(false) {
 	m_Size = size;
@@ -44,8 +45,10 @@ void Player::Update() {
 
 		b2Vec2 direction = { (WIDTH / 2) - mousePos.x, ((HEIGHT / 2) + mousePos.y)};
 
-		// TODO: the mouse position is probably relative to the rendered world, not the camera. It should be drawn relative to the camera view.
-		DrawCircle(mousePos.x, mousePos.y, 20, RED);
+		float cameraRelativeX = mousePos.x - camera.offset.x + m_Pos.x + 10.0f;
+		float cameraRelativeY = mousePos.y - camera.offset.y + m_Pos.y + 25.0f;
+
+		DrawCircle(cameraRelativeX, cameraRelativeY, 20, RED);
 
 		float velocityY = 0;
 

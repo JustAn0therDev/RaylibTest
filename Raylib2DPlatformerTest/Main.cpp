@@ -51,8 +51,8 @@ int main() {
 	camera.zoom = 1;
 
 	Scene mainScene;
-	mainScene.m_Entities.emplace_back(player);
 	mainScene.m_Entities.emplace_back(ground);
+	mainScene.m_Entities.emplace_back(player);
 
 	while (!WindowShouldClose())
 	{
