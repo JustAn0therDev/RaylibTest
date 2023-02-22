@@ -19,6 +19,7 @@ private:
 	Vector2 m_Size;
 	bool m_IsGrounded;
 	bool m_HasDash;
+	bool m_HasDoubleJump;
 
 	void Jump();
 };

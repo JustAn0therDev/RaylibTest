@@ -17,10 +17,11 @@ unsigned char circleAlpha = 0;
 Player::Player(Vector2 size, Vector2 pos, b2Body* body) : 
 	m_Pos({ 0, 0 }), 
 	m_Speed(1.0f), 
-	m_JumpVelocity(60.0f), 
+	m_JumpVelocity(100.0f), 
 	m_FallVelocity(2.0f), 
 	m_IsGrounded(false),
-	m_HasDash(true) {
+	m_HasDash(true),
+	m_HasDoubleJump(false) {
 	m_Size = size;
 	m_Body = body;
 }
@@ -95,13 +96,18 @@ void Player::Update() {
 	if (contactEdge != nullptr) {
 		m_IsGrounded = true;
 		m_HasDash = true;
+		m_HasDoubleJump = true;
 	}
 	else {
 		m_IsGrounded = false;
 	}
 
-	if (IsKeyDown(KEY_SPACE) && m_IsGrounded) {
+	if (IsKeyPressed(KEY_SPACE) && m_IsGrounded) {
 		Jump();
+	}
+	else if (IsKeyPressed(KEY_SPACE) && m_HasDoubleJump) {
+		Jump();
+		m_HasDoubleJump = false;
 	}
 
 	if (!m_IsGrounded) {
